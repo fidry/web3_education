@@ -1,0 +1,3 @@
+web3==6.13.0
+fake-useragent==1.4.0
+requests==2.31.0
