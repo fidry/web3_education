@@ -298,7 +298,7 @@ class Transactions:
         contract_address, abi = await self.client.contracts.get_contract_attributes(token)
         contract = await self.client.contracts.default_token(contract_address)
 
-        if not amount:
+        if amount is None:
             amount = CommonValues.InfinityInt
         elif isinstance(amount, (int, float)):
             amount = TokenAmount(

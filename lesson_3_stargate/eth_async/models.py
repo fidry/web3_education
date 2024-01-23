@@ -122,6 +122,7 @@ class Network:
         self.tx_type: int = tx_type
         self.coin_symbol: str | None = coin_symbol
         self.explorer: str | None = explorer
+        # todo: добавить поле decimals
 
         if not self.chain_id:
             try:
@@ -300,6 +301,11 @@ class RawContract(AutoRepr):
         self.title = title
         self.address = Web3.to_checksum_address(address)
         self.abi = json.loads(abi) if isinstance(abi, str) else abi
+
+    def __eq__(self, other) -> bool:
+        if self.address == other.address and self.abi == other.abi:
+            return True
+        return False
 
 
 @dataclass

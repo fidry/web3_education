@@ -3,13 +3,13 @@ import asyncio
 from eth_async.client import Client
 from eth_async.models import Networks, TokenAmount
 
-from data.config import pk
+from data.config import PRIVATE_KEY
 from tasks.woofi import WooFi
 from data.models import Contracts
 
 
 async def main():
-    client = Client(private_key=pk, network=Networks.Arbitrum)
+    client = Client(private_key=PRIVATE_KEY, network=Networks.Arbitrum)
     woofi = WooFi(client=client)
 
     # eth_amount = TokenAmount(amount=0.001)
@@ -24,8 +24,16 @@ async def main():
     # res = await woofi.swap_usdc_to_arb(amount=usdc_amount)
     # print(res)
 
-    arb_amount = TokenAmount(amount=0.5, decimals=18)
-    res = await woofi.swap_arb_to_wbtc(amount=arb_amount)
+    # arb_amount = TokenAmount(amount=0.5, decimals=18)
+    # res = await woofi.swap_arb_to_wbtc(amount=arb_amount)
+    # print(res)
+
+    amount = TokenAmount(amount=7, decimals=6)
+    res = await woofi.swap(
+        from_token=Contracts.ARBITRUM_USDC,
+        to_token=Contracts.ARBITRUM_USDC_e,
+        amount=amount
+    )
     print(res)
 
 
