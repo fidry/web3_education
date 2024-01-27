@@ -111,6 +111,7 @@ class Network:
             self,
             name: str,
             rpc: str,
+            decimals: int | None = None,
             chain_id: int | None = None,
             tx_type: int = 0,
             coin_symbol: str | None = None,
@@ -122,6 +123,7 @@ class Network:
         self.tx_type: int = tx_type
         self.coin_symbol: str | None = coin_symbol
         self.explorer: str | None = explorer
+        self.decimals = decimals
         # todo: добавить поле decimals
 
         if not self.chain_id:
@@ -130,13 +132,20 @@ class Network:
             except Exception as err:
                 raise exceptions.WrongChainID(f'Can not get chain id: {err}')
 
-        if not self.coin_symbol:
+        if not self.coin_symbol or not self.decimals:
             try:
-                response = requests.get('https://chainid.network/chains.json').json()
-                for network in response:
-                    if network['chainId'] == self.chain_id:
-                        self.coin_symbol = network['nativeCurrency']['symbol']
+                network = None
+                networks_info_response = requests.get('https://chainid.network/chains.json').json()
+                for network_ in networks_info_response:
+                    if network_['chainId'] == self.chain_id:
+                        network = network_
                         break
+
+                if not self.coin_symbol:
+                    self.coin_symbol = network['nativeCurrency']['symbol']
+                if not self.decimals:
+                    self.decimals = int(network['nativeCurrency']['decimals'])
+
             except Exception as err:
                 raise exceptions.WrongCoinSymbol(f'Can not get coin symbol: {err}')
 
@@ -152,6 +161,7 @@ class Networks:
         chain_id=1,
         tx_type=2,
         coin_symbol='ETH',
+        decimals=18,
         explorer='https://etherscan.io/',
     )
 
@@ -161,6 +171,7 @@ class Networks:
         chain_id=42161,
         tx_type=2,
         coin_symbol='ETH',
+        decimals=18,
         explorer='https://arbiscan.io/',
     )
 
@@ -170,6 +181,7 @@ class Networks:
         chain_id=42170,
         tx_type=2,
         coin_symbol='ETH',
+        decimals=18,
         explorer='https://nova.arbiscan.io/',
     )
 
@@ -179,6 +191,7 @@ class Networks:
         chain_id=10,
         tx_type=2,
         coin_symbol='ETH',
+        decimals=18,
         explorer='https://optimistic.etherscan.io/',
     )
 
@@ -188,6 +201,7 @@ class Networks:
         chain_id=56,
         tx_type=0,
         coin_symbol='BNB',
+        decimals=18,
         explorer='https://bscscan.com/',
     )
 
@@ -197,6 +211,7 @@ class Networks:
         chain_id=137,
         tx_type=2,
         coin_symbol='MATIC',
+        decimals=18,
         explorer='https://polygonscan.com/',
     )
 
@@ -206,6 +221,7 @@ class Networks:
         chain_id=43114,
         tx_type=2,
         coin_symbol='AVAX',
+        decimals=18,
         explorer='https://snowtrace.io/',
     )
 
@@ -215,6 +231,7 @@ class Networks:
         chain_id=1284,
         tx_type=2,
         coin_symbol='GLMR',
+        decimals=18,
         explorer='https://moonscan.io/',
     )
 
@@ -224,6 +241,7 @@ class Networks:
         chain_id=250,
         tx_type=0,
         coin_symbol='FTM',
+        decimals=18,
         explorer='https://ftmscan.com/',
     )
 
@@ -233,6 +251,7 @@ class Networks:
         chain_id=42220,
         tx_type=0,
         coin_symbol='CELO',
+        decimals=18,
         explorer='https://celoscan.io/',
     )
 
@@ -242,6 +261,7 @@ class Networks:
         chain_id=100,
         tx_type=2,
         coin_symbol='xDAI',
+        decimals=18,
         explorer='https://gnosisscan.io/',
     )
 
@@ -251,6 +271,7 @@ class Networks:
         chain_id=128,
         tx_type=2,
         coin_symbol='HECO',
+        decimals=18,
         explorer='https://www.hecoinfo.com/en-us/',
     )
 
@@ -261,6 +282,7 @@ class Networks:
         chain_id=5,
         tx_type=2,
         coin_symbol='ETH',
+        decimals=18,
         explorer='https://goerli.etherscan.io/',
     )
 
@@ -270,6 +292,7 @@ class Networks:
         chain_id=11155111,
         tx_type=2,
         coin_symbol='ETH',
+        decimals=18,
         explorer='https://sepolia.etherscan.io',
     )
 
@@ -288,7 +311,7 @@ class RawContract(AutoRepr):
     address: ChecksumAddress
     abi: list[dict[str, ...]]
 
-    def __init__(self, title: str, address: str, abi: list[dict[str, ...]] | str) -> None:
+    def __init__(self, address: str, abi: list[dict[str, ...]] | str, title: str = '') -> None:
         """
         Initialize the class.
 

@@ -30,7 +30,7 @@ class WooFi(Base):
         contract = await self.client.contracts.get(contract_address=Contracts.ARBITRUM_WOOFI)
 
         if not amount:
-            amount = await self.client.wallet.balance(token_address=from_token.address)
+            amount = await self.client.wallet.balance(token=from_token.address)
 
         if from_token != Contracts.ARBITRUM_ETH:
             if await self.approve_interface(token_address=from_token.address, spender=contract.address, amount=amount):

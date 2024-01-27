@@ -3,8 +3,10 @@ from typing import TYPE_CHECKING
 
 from web3 import Web3
 from eth_typing import ChecksumAddress
+from web3.contract import AsyncContract
 
-from .models import TokenAmount
+from . import types
+from .models import TokenAmount, RawContract
 
 if TYPE_CHECKING:
     from .client import Client
@@ -16,7 +18,7 @@ class Wallet:
 
     async def balance(
             self,
-            token_address: str | ChecksumAddress | None = None,
+            token: types.Contract | None = None,
             address: str | ChecksumAddress | None = None,
             decimals: int = 18
     ) -> TokenAmount:
@@ -24,16 +26,21 @@ class Wallet:
             address = self.client.account.address
 
         address = Web3.to_checksum_address(address)
-        if not token_address:
+
+        if not token:
             return TokenAmount(
                 amount=await self.client.w3.eth.get_balance(account=address),
                 decimals=decimals,
                 wei=True
             )
 
-        token_address = Web3.to_checksum_address(token_address)
+        token_address = token
+        if isinstance(token, (RawContract, AsyncContract)):
+            token_address = token.address
 
-        contract = await self.client.contracts.default_token(contract_address=token_address)
+        contract = await self.client.contracts.default_token(
+            contract_address=Web3.to_checksum_address(token_address)
+        )
 
         return TokenAmount(
             amount=await contract.functions.balanceOf(address).call(),

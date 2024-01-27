@@ -49,6 +49,24 @@ class Contracts(Singleton):
         abi=read_json(path=(ABIS_DIR, 'stargate.json'))
     )
 
+    ARBITRUM_UNISWAP_ROUTER = RawContract(
+        title='arbitrum_uniswap_router',
+        address='0xec8b0f7ffe3ae75d7ffab09429e3675bb63503e4',
+        abi=read_json(path=(ABIS_DIR, 'uniswap.json'))
+    )
+
+    ARBITRUM_GETH = RawContract(
+        title='GETH',
+        address='0xdD69DB25F6D620A7baD3023c5d32761D353D3De9',
+        abi=DefaultABIs.Token
+    )
+
+    ARBITRUM_TESTNETBRIDGE = RawContract(
+        title='arbitrum_testnetbridge',
+        address='0xdd69db25f6d620a7bad3023c5d32761d353d3de9',
+        abi=read_json(path=(ABIS_DIR, 'testnetbridge.json'))
+    )
+
     POLYGON_STARGATE = RawContract(
         title='polygon_stargate',
         address='0x45A01E4e04F14f7A4a6702c74187c5F6222033cd',
@@ -83,4 +101,16 @@ class Contracts(Singleton):
         title='optimism_stargate',
         address='0xb0d502e938ed5f4df2e681fe6e419ff29631d62b',
         abi=read_json(path=(ABIS_DIR, 'stargate.json'))
+    )
+
+    BSC_COREDAO_BRIDGE = RawContract(
+        title='bsc_coredao_bridge',
+        address='0x52e75D318cFB31f9A2EdFa2DFee26B161255B233',
+        abi=read_json(path=(ABIS_DIR, 'coredao_bridge.json'))
+    )
+
+    BSC_USDT = RawContract(
+        title='USDT',
+        address='0x55d398326f99059ff775485246999027b3197955',
+        abi=DefaultABIs.Token
     )

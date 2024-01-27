@@ -29,7 +29,7 @@ class Base:
         raise ValueError(f'Can not get {token_symbol + second_token} price from Binance')
 
     async def approve_interface(self, token_address, spender, amount: TokenAmount | None = None) -> bool:
-        balance = await self.client.wallet.balance(token_address=token_address)
+        balance = await self.client.wallet.balance(token=token_address)
         if balance.Wei <= 0:
             return False
 

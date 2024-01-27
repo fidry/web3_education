@@ -9,7 +9,7 @@ from data.config import PRIVATE_KEY
 
 async def main():
     client = Client(private_key=PRIVATE_KEY, network=Networks.Avalanche)
-    client.transactions
+    # client.transactions
 
 
 if __name__ == '__main__':
