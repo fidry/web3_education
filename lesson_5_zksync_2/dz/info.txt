@@ -1,0 +1,16 @@
+Практика:
+1) Для SyncSwap реализовать функции: 
+- swap_eth_to_usdt
+- swap_eth_to_busd
+- swap_eth_to_wbtc
+- swap_usdc_to_eth
+- swap_usdt_to_eth
+- swap_busd_to_eth
+- swap_wbtc_to_eth
+
+2) Для Maveric реализовать функции:
+- swap_eth_to_busd
+- swap_usdc_to_eth
+- swap_busd_to_eth
+
+3) Реализовать функции deposit и withdraw для официального моста

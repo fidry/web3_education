@@ -78,12 +78,35 @@ class SpaceFi(Base):
         )
 
         if from_token_is_eth:
-            params = TxArgs(
-                amountOut=amount_out_min.Wei,
-                path=path,
-                toAddress=self.client.account.address,
-                deadline=int(time.time() + 20 * 60),
+            '''
+            0x7ff36ab5
+            0000000000000000000000000000000000000000000000000000000000038253 - amountOut
+            0000000000000000000000000000000000000000000000000000000000000080 - array link
+            000000000000000000000000b7a4557a2bbd392a89fbe80aa726cbd645d112cb - account address
+            0000000000000000000000000000000000000000000000000000000065c218a7 - deadline
+            0000000000000000000000000000000000000000000000000000000000000002 - array size
+            0000000000000000000000005aea5775959fbc2557cc8789bc1bf90a239d9a91 - WETH
+            0000000000000000000000003355df6d4c9c3035724fd0e3914de96a5a83aaf4 - USDC
+            '''
+
+            data = (
+                f'0x7ff36ab5'
+                f'{hex(amount_out_min.Wei)[2:].zfill(64)}'
+                f'{"80".zfill(64)}'
+                f'{str(self.client.account.address).lower()[2:].zfill(64)}'
+                f'{hex(int(time.time()) + 20 * 60)[2:].zfill(64)}'
+                f'{hex(len(path))[2:].zfill(64)}'
             )
+            for p in path:
+                data += p[2:].lower().zfill(64)
+
+            # params = TxArgs(
+            #     amountOut=amount_out_min.Wei,
+            #     path=path,
+            #     toAddress=self.client.account.address,
+            #     deadline=int(time.time() + 20 * 60),
+            # )
+
         else:
             params = TxArgs(
                 amountIn=amount.Wei,
@@ -98,9 +121,12 @@ class SpaceFi(Base):
 
         tx_params = TxParams(
             to=contract.address,
-            data=contract.encodeABI(function_name, args=params.tuple()),
+            # data=contract.encodeABI(function_name, args=params.tuple()),
+            data=data,
             value=amount.Wei if from_token_is_eth else 0
         )
+
+        # self.parse_params(params=tx_params['data'])
 
         tx = await self.client.transactions.sign_and_send(tx_params=tx_params)
         receipt = await tx.wait_for_receipt(client=self.client, timeout=300)
