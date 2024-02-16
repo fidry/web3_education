@@ -33,7 +33,7 @@ class MySwap(Base):
         amount_out = await Base.get_amount_out(
             amount_in=amount_in,
             token_out_name=token_out_name,
-            amount_out_dicimals=token_out_decimals
+            amount_out_decimals=token_out_decimals
         )
 
         eth_contract = Contract(
@@ -86,7 +86,7 @@ class MySwap(Base):
             amount_in=amount_in,
             token_in_name=token_in_name,
             token_out_name='ETH',
-            amount_out_dicimals=token_in_decimals
+            amount_out_decimals=token_in_decimals
         )
 
         token_contract = Contract(

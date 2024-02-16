@@ -39,7 +39,7 @@ class Base:
             slippage: float = 1.,
             token_in_name: str = 'ETH',
             token_out_name: str = 'USDT',
-            amount_out_dicimals: int = 18
+            amount_out_decimals: int = 18
     ) -> TokenAmount:
         token_in_name, token_out_name = token_in_name.upper(), token_out_name.upper()
 
@@ -48,5 +48,5 @@ class Base:
 
         return TokenAmount(
             amount=token_in_usd / token_out_usd * float(amount_in.Ether) * (100 - slippage) / 100,
-            decimals=amount_out_dicimals
+            decimals=amount_out_decimals
         )
