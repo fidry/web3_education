@@ -124,6 +124,64 @@ class Account(Module):
 
         return await async_get(self.url, params=aiohttp_params(params), headers=self.headers)
 
+    async def txlistinternal(
+            self,
+            address: str,
+            startblock: int | None = None,
+            endblock: int | None = None,
+            page: int = 1,
+            offset: int = 0,
+            sort: str = Sort.Asc
+    ):
+        action = 'txlistinternal'
+
+        if sort not in ('asc', 'desc'):
+            raise exceptions.APIException('"sort" parameter have to be either "asc" or "desc"')
+
+        params = {
+            'module': self.module,
+            'action': action,
+            'address': address,
+            'startblock': startblock,
+            'endblock': endblock,
+            'page': page,
+            'offset': offset,
+            'sort': sort,
+            'apikey': self.key,
+        }
+
+        return await async_get(self.url, params=aiohttp_params(params), headers=self.headers)
+
+    async def tokentx(
+            self,
+            contractaddress: str,
+            address: str,
+            page: int = 1,
+            offset: int = 0,
+            startblock: int | None = None,
+            endblock: int | None = None,
+            sort: str = Sort.Asc
+    ):
+        action = 'tokentx'
+
+        if sort not in ('asc', 'desc'):
+            raise exceptions.APIException('"sort" parameter have to be either "asc" or "desc"')
+
+        params = {
+            'module': self.module,
+            'action': action,
+            'contractaddress': contractaddress,
+            'address': address,
+            'page': page,
+            'offset': offset,
+            'startblock': startblock,
+            'endblock': endblock,
+            'sort': sort,
+            'apikey': self.key,
+        }
+
+        return await async_get(self.url, params=aiohttp_params(params), headers=self.headers)
+
 
 class Contract(Module):
     """
@@ -149,6 +207,32 @@ class Contract(Module):
             'module': self.module,
             'action': action,
             'address': address,
+            'apikey': self.key,
+        }
+        return await async_get(self.url, params=aiohttp_params(params), headers=self.headers)
+
+    async def getsourcecode(self, address: str):
+        action = 'getsourcecode'
+
+        params = {
+            'module': self.module,
+            'action': action,
+            'address': address,
+            'apikey': self.key,
+        }
+        return await async_get(self.url, params=aiohttp_params(params), headers=self.headers)
+
+
+class Transaction(Module):
+    module: str = 'transaction'
+
+    async def getstatus(self, txhash: str):
+        action = 'getstatus'
+
+        params = {
+            'module': self.module,
+            'action': action,
+            'txhash': txhash,
             'apikey': self.key,
         }
         return await async_get(self.url, params=aiohttp_params(params), headers=self.headers)
@@ -187,7 +271,7 @@ class APIFunctions:
         self.headers = {'content-type': 'application/json', 'user-agent': UserAgent().chrome}
         self.account = Account(self.key, self.url, self.headers)
         self.contract = Contract(self.key, self.url, self.headers)
-        # self.transaction = Transaction(self.key, self.url, self.headers)
+        self.transaction = Transaction(self.key, self.url, self.headers)
         # self.block = Block(self.key, self.url, self.headers)
         # self.logs = Logs(self.key, self.url, self.headers)
         # self.token = Token(self.key, self.url, self.headers)

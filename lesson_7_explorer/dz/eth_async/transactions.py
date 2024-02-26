@@ -412,3 +412,14 @@ class Transactions:
                 txs[tx.get('hash')] = tx
 
         return txs
+
+    @api_key_required
+    async def find_tx_by_method_id(self, address: str, to: str, method_id: str):
+        txs = {}
+        coin_txs = (await self.client.network.api.functions.account.txlist(address))['result']
+        for tx in coin_txs:
+            # {'blockNumber': '17775679', 'timeStamp': '1690355483', 'hash': '0xce8add3eda0f57419ba41ea999912268f7ed19bda11cc19db098185bfb6c616e', 'nonce': '13', 'blockHash': '0xca8faf70a88f1bbbdb47f0390a050ec1c1c94e28f6cc5d7e793954519c7f739d', 'transactionIndex': '44', 'from': '0x36f302d18dcede1ab1174f47726e62212d1ccead', 'to': '0x32400084c286cf3e17e7b677ea9583e60a000324', 'value': '35703276971597170', 'gas': '124414', 'gasPrice': '18344087912', 'isError': '0', 'txreceipt_status': '1', 'input': '0xeb67241900000000000000000000000036f302d18dcede1ab1174f47726e62212d1ccead000000000000000000000000000000000000000000000000007d82a7600f4e7200000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000b73a30000000000000000000000000000000000000000000000000000000000000320000000000000000000000000000000000000000000000000000000000000010000000000000000000000000036f302d18dcede1ab1174f47726e62212d1ccead00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000', 'contractAddress': '', 'cumulativeGasUsed': '5139068', 'gasUsed': '118078', 'confirmations': '1531219', 'methodId': '0xeb672419', 'functionName': 'requestL2Transaction(address _contractL2,uint256 _l2Value,bytes _calldata,uint256 _l2GasLimit,uint256 _gasPricePerPubdata,bytes[] _factoryDeps,address _refundRecipient)'}
+            # if tx.get('isError') == '0' and tx.get('to') == to.lower() and method_id in tx.get('methodId'):
+            if tx.get('isError') == '0' and tx.get('to') == to.lower() and tx.get('input').startswith(method_id):
+                txs[tx.get('hash')] = tx
+        return txs

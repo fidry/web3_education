@@ -135,6 +135,19 @@ class Account(Module):
             txs_lst += txs
         return txs_lst
 
+    async def find_tx_by_method_id(
+            self,
+            address: str,
+            to: str, method_id: str,
+    ):
+        txs = {}
+        coin_txs = await self.txlist_all(address=address)
+        for tx in coin_txs:
+            # {'txId': '0x12364b581306d4d24dfa7a932b824d5138dd2aa438d37df89c3f2b53e28ec3ca', 'methodId': '0x6c0960f9', 'blockHash': '0xda45c43705df9e618c6cb7da3b140337f66ee29658c8e718a14d0e930c37ec19', 'height': '27164388', 'transactionTime': '1708546781000', 'from': '0x7277a1e840b1eef3e649b83483366d35f4e98fae', 'to': '0x32400084c286cf3e17e7b677ea9583e60a000324', 'isFromContract': False, 'isToContract': False, 'amount': '0', 'transactionSymbol': 'ETH', 'txFee': '0.0000289515', 'state': 'success', 'tokenId': '', 'tokenContractAddress': '', 'challengeStatus': '', 'l1OriginHash': ''}
+            if tx.get('state') == 'success' and tx.get('to') == to.lower() and method_id in tx.get('methodId'):
+                txs[tx.get('txId')] = tx
+        return txs
+
 
 class APIFunctions:
     """

@@ -215,6 +215,9 @@ class Networks:
         coin_symbol='ETH',
         decimals=18,
         explorer='https://nova.arbiscan.io/',
+        api=API(
+            key=config.ARBITRUM_API_KEY, url='https://api-nova.arbiscan.io/api', docs='https://nova.arbiscan.io/apis/'
+        )
     )
 
     Optimism = Network(
@@ -225,6 +228,10 @@ class Networks:
         coin_symbol='ETH',
         decimals=18,
         explorer='https://optimistic.etherscan.io/',
+        api=API(
+            key=config.OPTIMISM_API_KEY, url='https://api-optimistic.etherscan.io/api',
+            docs='https://docs.optimism.etherscan.io/'
+        ),
     )
 
     BSC = Network(
@@ -235,6 +242,7 @@ class Networks:
         coin_symbol='BNB',
         decimals=18,
         explorer='https://bscscan.com/',
+        api=API(key=config.BSC_API_KEY, url='https://api.bscscan.com/api', docs='https://docs.bscscan.com/'),
     )
 
     Polygon = Network(
@@ -245,6 +253,9 @@ class Networks:
         coin_symbol='MATIC',
         decimals=18,
         explorer='https://polygonscan.com/',
+        api=API(
+            key=config.POLYGON_API_KEY, url='https://api.polygonscan.com/api', docs='https://docs.polygonscan.com/'
+        ),
     )
 
     Avalanche = Network(
@@ -255,6 +266,7 @@ class Networks:
         coin_symbol='AVAX',
         decimals=18,
         explorer='https://snowtrace.io/',
+        api=API(key=config.AVALANCHE_API_KEY, url='https://api.snowtrace.io/api', docs='https://docs.snowtrace.io/')
     )
 
     Moonbeam = Network(
@@ -265,6 +277,9 @@ class Networks:
         coin_symbol='GLMR',
         decimals=18,
         explorer='https://moonscan.io/',
+        api=API(
+            key=config.MOONBEAM_API_KEY, url='https://api-moonbeam.moonscan.io/api', docs='https://moonscan.io/apis/'
+        )
     )
 
     Fantom = Network(
@@ -275,6 +290,7 @@ class Networks:
         coin_symbol='FTM',
         decimals=18,
         explorer='https://ftmscan.com/',
+        api=API(key=config.FANTOM_API_KEY, url='https://api.ftmscan.com/api', docs='https://docs.ftmscan.com/')
     )
 
     Celo = Network(
@@ -285,6 +301,7 @@ class Networks:
         coin_symbol='CELO',
         decimals=18,
         explorer='https://celoscan.io/',
+        api=API(key=config.CELO_API_KEY, url='https://api.celoscan.io/api', docs='https://celoscan.io/apis/')
     )
 
     ZkSync = Network(
@@ -306,6 +323,7 @@ class Networks:
         coin_symbol='xDAI',
         decimals=18,
         explorer='https://gnosisscan.io/',
+        api=API(key=config.GNOSIS_API_KEY, url='https://api.gnosisscan.io/api', docs='https://docs.gnosisscan.io/')
     )
 
     HECO = Network(
@@ -316,6 +334,7 @@ class Networks:
         coin_symbol='HECO',
         decimals=18,
         explorer='https://www.hecoinfo.com/en-us/',
+        api=API(key=config.HECO_API_KEY, url='https://api.hecoinfo.com/api', docs='https://hecoinfo.com/apis')
     )
 
     # Testnets
@@ -327,6 +346,10 @@ class Networks:
         coin_symbol='ETH',
         decimals=18,
         explorer='https://goerli.etherscan.io/',
+        api=API(
+            key=config.GOERLI_API_KEY, url='https://api-goerli.etherscan.io/api',
+            docs='https://docs.etherscan.io/v/goerli-etherscan/'
+        )
     )
 
     Sepolia = Network(
@@ -337,6 +360,10 @@ class Networks:
         coin_symbol='ETH',
         decimals=18,
         explorer='https://sepolia.etherscan.io',
+        api=API(
+            key=config.SEPOLIA_API_KEY, url='https://api-sepolia.etherscan.io/api',
+            docs='https://docs.etherscan.io/v/sepolia-etherscan/'
+        )
     )
 
 
