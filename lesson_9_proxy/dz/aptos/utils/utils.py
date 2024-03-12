@@ -58,7 +58,28 @@ async def async_get(
     async with aiohttp.ClientSession(headers=headers, connector=connector) as session:
         async with session.get(url=url, **kwargs) as response:
             status_code = response.status
-            response = await response.json()
+            response = await response.json(encoding='utf-8')
             if status_code <= 201:
                 return status_code, response
+    return None
+
+
+async def async_post(
+        url: str,
+        proxy: str | None = None,
+        headers: Optional[dict] = None,
+        **kwargs
+) -> tuple[int, dict] | None:
+
+    connector = ProxyConnector.from_url(
+        url=proxy
+    ) if proxy else None
+
+    async with aiohttp.ClientSession(headers=headers, connector=connector) as session:
+        async with session.post(url=url, **kwargs) as response:
+            status_code = response.status
+            response = await response.json(encoding='utf-8')
+            if status_code <= 201:
+                return status_code, response
+
     return None

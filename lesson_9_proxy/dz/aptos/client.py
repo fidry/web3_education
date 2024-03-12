@@ -21,7 +21,7 @@ from aptos_sdk.type_tag import TypeTag, StructTag
 from aptos.data.models import TokenAmount, ResourceType, Tokens, Token, SwapRouters, SwapRouterInfo
 from aptos.utils.utils import get_explorer_hash_link, prepare_address_for_aptoscan_api
 from data.models import Tx
-from aptos.utils.utils import async_get
+from aptos.utils.utils import async_get, async_post
 
 
 class AptosClient(RestClient):
@@ -327,6 +327,27 @@ class AptosClient(RestClient):
             raise ApiError(response.text, response.status_code)
         return response.json()["hash"]
 
+    async def submit_bcs_transaction_async(self, signed_transaction: SignedTransaction) -> str:
+        headers = {"Content-Type": "application/x.aptos.signed_transaction+bcs"}
+
+        if self.proxy is None:
+            status_code, response = await async_post(
+                url=f"{self.base_url}/transactions",
+                headers=headers,
+                data=signed_transaction.bytes(),
+            )
+        else:
+            status_code, response = await async_post(
+                url=f"{self.base_url}/transactions",
+                headers=headers,
+                data=signed_transaction.bytes(),
+                proxy=self.proxy
+            )
+
+        if status_code >= 400:
+            raise ApiError(response, status_code)
+        return response["hash"]
+
     def wait_for_transaction(self, txn_hash: str) -> None:
         count = 0
         while self.transaction_pending(txn_hash):
@@ -348,6 +369,28 @@ class AptosClient(RestClient):
                 "success" in response.json() and response.json()["success"]
         ), f"{response.text} - {txn_hash}"
 
+    async def wait_for_transaction_async(self, txn_hash: str) -> None:
+        count = 0
+        while await self.transaction_pending_async(txn_hash):
+            assert (
+                    count < self.client_config.transaction_wait_in_seconds
+            ), f"transaction {txn_hash} timed out"
+            time.sleep(1)
+            count += 1
+
+        if self.proxy is None:
+            status_code, response = await async_get(
+                url=f"{self.base_url}/transactions/by_hash/{txn_hash}",
+            )
+        else:
+            status_code, response = await async_get(
+                url=f"{self.base_url}/transactions/by_hash/{txn_hash}",
+                proxy=self.proxy
+            )
+        assert (
+                "success" in response and response["success"]
+        ), f"{response} - {txn_hash}"
+
     def transaction_pending(self, txn_hash: str) -> bool:
         if self.proxy is None:
             response = self.client.get(
@@ -362,6 +405,20 @@ class AptosClient(RestClient):
         if response.status_code >= 400:
             raise ApiError(response.text, response.status_code)
         return response.json()["type"] == "pending_transaction"
+
+    async def transaction_pending_async(self, txn_hash: str) -> bool:
+        if self.proxy is None:
+            status_code, response = async_get(url=f"{self.base_url}/transactions/by_hash/{txn_hash}")
+        else:
+            status_code, response = async_get(
+                url=f"{self.base_url}/transactions/by_hash/{txn_hash}",
+                proxy=self.proxy
+            )
+        if status_code == 404:
+            return True
+        if status_code >= 400:
+            raise ApiError(response, status_code)
+        return response["type"] == "pending_transaction"
 
     def simulate_transaction(self, transaction: RawTransaction, sender: Account) -> dict[str, Any]:
         authenticator = Authenticator(Ed25519Authenticator(

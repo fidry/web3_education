@@ -23,9 +23,9 @@ async def main():
     #     account_address=token_address, resource_type=f'{models.ResourceType.info}<{token.address}>')
     # print(coin_info)
 
-    coin_info = await client.account_resource_async(
-        account_address=token_address, resource_type=f'{models.ResourceType.info}<{token.address}>')
-    print(coin_info)
+    # coin_info = await client.account_resource_async(
+    #     account_address=token_address, resource_type=f'{models.ResourceType.info}<{token.address}>')
+    # print(coin_info)
 
 
 if __name__ == '__main__':
