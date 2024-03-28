@@ -25,6 +25,8 @@ async def activity():
 
     while True:
         try:
+            now = datetime.now()
+
             wallet: Wallet = db.one(
                 Wallet, Wallet.initial_completed.is_(True) & (Wallet.next_activity_action_time <= now)
             )
@@ -66,7 +68,7 @@ async def activity():
 
                 logger.success(f'{wallet.address}: {status}')
 
-                # todo: переписать на запрос полечения минимального значения
+                # todo: переписать на запрос получения минимального значения
                 #  next_activity_action_time для кошельков initial_completed = True
                 next_action_time = min((wallet.next_activity_action_time for wallet in db.all(
                     Wallet, Wallet.initial_completed.is_(True)
