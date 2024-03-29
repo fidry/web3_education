@@ -1,0 +1,50 @@
+[{
+	"constant": false,
+	"inputs": [{
+		"name": "amountOutMin",
+		"type": "uint256"
+	}, {
+		"name": "path",
+		"type": "address[]"
+	}, {
+		"name": "to",
+		"type": "address"
+	}, {
+		"name": "deadline",
+		"type": "uint256"
+	}, {
+		"name": "stable",
+		"type": "bool[]"
+	}],
+	"name": "swapExactETHForTokensSupportingFeeOnTransferTokens",
+	"outputs": [],
+	"payable": false,
+	"stateMutability": "nonpayable",
+	"type": "function"
+}, {
+	"constant": false,
+	"inputs": [{
+		"name": "amountIn",
+		"type": "uint256"
+	}, {
+		"name": "amountOutMin",
+		"type": "uint256"
+	}, {
+		"name": "path",
+		"type": "address[]"
+	}, {
+		"name": "to",
+		"type": "address"
+	}, {
+		"name": "deadline",
+		"type": "uint256"
+	}, {
+		"name": "stable",
+		"type": "bool[]"
+	}],
+	"name": "swapExactTokensForETHSupportingFeeOnTransferTokens",
+	"outputs": [],
+	"payable": false,
+	"stateMutability": "nonpayable",
+	"type": "function"
+}]
