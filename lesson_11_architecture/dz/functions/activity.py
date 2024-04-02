@@ -4,16 +4,18 @@ from datetime import datetime, timedelta
 
 from web3 import Web3
 from loguru import logger
+from sqlalchemy import select, func
 
 from libs.eth_async.client import Client
 from libs.eth_async.data.models import Networks
 
 from data.models import Settings
+from data.config import DELAY_IN_CASE_OF_ERROR
 from utils.db_api.wallet_api import db
 from utils.db_api.models import Wallet
 from tasks.controller import Controller
 from functions.select_random_action import select_random_action
-from utils.update_expired import update_expired
+from utils.update_expired import update_expired, update_next_action_time
 
 
 async def activity():
@@ -47,38 +49,37 @@ async def activity():
             client = Client(private_key=wallet.private_key, network=Networks.ZkSync, proxy=wallet.proxy)
             controller = Controller(client=client)
 
-            now = datetime.now()
             action = await select_random_action(controller=controller, wallet=wallet, initial=False)
 
             if not action:
-                logger.warning(f'{wallet.address} | select_random_action | can not choose the action')
+                logger.error(f'{wallet.address} | select_random_action | can not choose the action')
+                update_next_action_time(private_key=wallet.private_key, seconds=DELAY_IN_CASE_OF_ERROR, initial=False)
                 continue
 
             if action == 'Insufficient balance':
                 logger.error(f'{wallet.address}: Insufficient balance')
+                update_next_action_time(private_key=wallet.private_key, seconds=DELAY_IN_CASE_OF_ERROR, initial=False)
                 continue
 
             status = await action()
             if 'Failed' not in status:
-                wallet.next_activity_action_time = now + timedelta(
-                    seconds=random.randint(settings.activity_actions_delay.from_, settings.activity_actions_delay.to_)
+                update_next_action_time(
+                    private_key=wallet.private_key,
+                    seconds=random.randint(settings.activity_actions_delay.from_, settings.activity_actions_delay.to_),
+                    initial=False
                 )
-
-                db.commit()
 
                 logger.success(f'{wallet.address}: {status}')
 
-                # todo: переписать на запрос получения минимального значения
-                #  next_activity_action_time для кошельков initial_completed = True
-                next_action_time = min((wallet.next_activity_action_time for wallet in db.all(
-                    Wallet, Wallet.initial_completed.is_(True)
-                )))
+                stmt = select(func.min(Wallet.next_activity_action_time)).where(Wallet.initial_completed.is_(True))
+                next_action_time = db.one(stmt=stmt)
+
                 logger.info(f'The next closest activity action will be performed at {next_action_time}')
 
                 await asyncio.sleep(delay)
 
             else:
-                wallet.next_activity_action_time = now + timedelta(seconds=random.randint(10 * 60, 20 * 60))
+                update_next_action_time(private_key=wallet.private_key, seconds=DELAY_IN_CASE_OF_ERROR, initial=False)
                 db.commit()
                 logger.error(f'{wallet.address}: {status}')
 

@@ -21,6 +21,8 @@ class Base:
             return 1
         if token_symbol == 'WETH':
             token_symbol = 'ETH'
+        if token_symbol == 'WBTC':
+            token_symbol = 'BTC'
 
         for _ in range(5):
             try:

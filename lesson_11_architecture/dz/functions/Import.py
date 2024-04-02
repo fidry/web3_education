@@ -63,6 +63,8 @@ class Import:
                     okx_address=wallet.okx_address,
                     number_of_swaps=random.randint(
                         settings.number_of_swaps.from_, settings.number_of_swaps.to_),
+                    number_of_dmail=random.randint(
+                        settings.number_of_dmail.from_, settings.number_of_dmail.to_),
                     number_of_liquidity_stake=random.randint(
                         settings.number_of_liquidity_stake.from_, settings.number_of_liquidity_stake.to_),
                 )

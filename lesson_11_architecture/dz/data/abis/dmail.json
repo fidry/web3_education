@@ -1,0 +1,20 @@
+[
+  {
+	"constant": false,
+	"inputs": [
+      {
+		"name": "email",
+		"type": "string"
+      },
+      {
+		"name": "theme",
+		"type": "string"
+	  }
+    ],
+	"name": "send_mail",
+	"outputs": [],
+	"payable": false,
+	"stateMutability": "nonpayable",
+	"type": "function"
+  }
+]

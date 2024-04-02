@@ -18,6 +18,7 @@ class Wallet(Base):
     name: Mapped[str]
     okx_address: Mapped[str]
     number_of_swaps: Mapped[int]
+    number_of_dmail: Mapped[int]
     number_of_liquidity_stake: Mapped[int]
     next_initial_action_time: Mapped[datetime | None] = mapped_column(default=None)
     next_activity_action_time: Mapped[datetime | None] = mapped_column(default=None)

@@ -15,6 +15,7 @@ async def select_random_action(controller: Controller, wallet: Wallet, initial: 
     weights = []
 
     swaps = 0
+    dmail = 0
 
     eth_balance = await controller.client.wallet.balance()
 
@@ -29,11 +30,13 @@ async def select_random_action(controller: Controller, wallet: Wallet, initial: 
             address=controller.client.account.address
         )
         swaps = await controller.count_swaps(tx_list=tx_list)
+        dmail = await controller.count_dmail(tx_list=tx_list)
         logger.debug(
-            f'{wallet.address} | amount swaps: {swaps}/{wallet.number_of_swaps};'
+            f'{wallet.address} | amount swaps: {swaps}/{wallet.number_of_swaps}; '
+            f'amount dmail: {dmail}/{wallet.number_of_dmail}; '
         )
 
-        if swaps >= wallet.number_of_swaps:
+        if swaps >= wallet.number_of_swaps and dmail >= wallet.number_of_dmail:
             return 'Processed'
 
     sufficient_balance = float(eth_balance.Ether) > settings.minimal_balance + settings.eth_amount_for_swap.to_
@@ -121,6 +124,15 @@ async def select_random_action(controller: Controller, wallet: Wallet, initial: 
                 1,
                 1,
                 1,
+            ]
+
+    if dmail < wallet.number_of_dmail:
+        if float(eth_balance.Ether) > settings.minimal_balance:
+            possible_actions += [
+                controller.dmail.send_dmail,
+            ]
+            weights += [
+                5,
             ]
 
     if possible_actions:

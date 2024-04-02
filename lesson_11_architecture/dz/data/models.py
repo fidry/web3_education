@@ -76,6 +76,8 @@ class Settings(Singleton, AutoRepr):
 
         self.number_of_swaps: FromTo = FromTo(
             from_=json_data['number_of_swaps']['from'], to_=json_data['number_of_swaps']['to'])
+        self.number_of_dmail: FromTo = FromTo(
+            from_=json_data['number_of_dmail']['from'], to_=json_data['number_of_dmail']['to'])
         self.number_of_liquidity_stake: FromTo = FromTo(
             from_=json_data['number_of_liquidity_stake']['from'], to_=json_data['number_of_liquidity_stake']['to'])
 
@@ -134,6 +136,12 @@ class Contracts(Singleton):
         title='maverick',
         address='0x39E098A153Ad69834a9Dac32f0FCa92066aD03f4',
         abi=read_json(path=(ABIS_DIR, 'maverick.json'))
+    )
+
+    DMAIL = RawContract(
+        title='dmail',
+        address='0x981F198286E40F9979274E0876636E9144B8FB8E',
+        abi=read_json(path=(ABIS_DIR, 'dmail.json'))
     )
 
     WETH = RawContract(

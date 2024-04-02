@@ -7,6 +7,7 @@ from tasks.maverick import Maverick
 from tasks.mute import Mute
 from tasks.space_fi import SpaceFi
 from tasks.syncswap import SyncSwap
+from tasks.dmail import Dmail
 from tasks.official_bridge import OfficialBridge
 
 
@@ -20,6 +21,7 @@ class Controller(Base):
         self.mute = Mute(client=client)
         self.space_fi = SpaceFi(client=client)
         self.syncswap = SyncSwap(client=client)
+        self.dmail = Dmail(client=client)
 
     async def made_ethereum_bridge(self) -> bool:
         client = Client(private_key='', network=Networks.Ethereum)
@@ -85,6 +87,27 @@ class Controller(Base):
             address=self.client.account.address,
             to=Contracts.SYNC_SWAP.address,
             method_id='0x2cc4081e',
+            tx_list=tx_list
+        ))
+
+        return result_count
+
+    async def count_dmail(self, tx_list: list[dict] | None = None):
+        settings = Settings()
+        result_count = 0
+
+        api_oklink = APIFunctions(url='https://www.oklink.com', key=settings.oklink_api_key)
+
+        if not tx_list:
+            tx_list = await api_oklink.account.txlist_all(
+                address=self.client.account.address
+            )
+
+        # dmail
+        result_count += len(await api_oklink.account.find_tx_by_method_id(
+            address=self.client.account.address,
+            to=Contracts.DMAIL.address,
+            method_id='0x5b7d7482',
             tx_list=tx_list
         ))
 

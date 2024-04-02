@@ -5,7 +5,7 @@ from loguru import logger
 from sqlalchemy import select, and_, or_
 
 from data.models import Settings
-from utils.db_api.wallet_api import db
+from utils.db_api.wallet_api import db, get_wallet
 from utils.db_api.models import Wallet
 
 
@@ -57,3 +57,17 @@ def update_expired(initial: bool = False) -> None:
             )
 
     db.commit()
+
+
+def update_next_action_time(private_key: str, seconds: int, initial: bool = False) -> bool:
+    try:
+        now = datetime.now()
+        wallet = get_wallet(private_key=private_key)
+        if initial:
+            wallet.next_initial_action_time = now + timedelta(seconds=seconds)
+        else:
+            wallet.next_activity_action_time = now + timedelta(seconds=seconds)
+        db.commit()
+        return True
+    except BaseException:
+        return False

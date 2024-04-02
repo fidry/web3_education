@@ -39,6 +39,7 @@ def create_files():
         'minimal_balance': 0.0005,
         'use_official_bridge': False,
         'number_of_swaps': {'from': 5, 'to': 10},
+        'number_of_dmail': {'from': 5, 'to': 10},
         'number_of_liquidity_stake': {'from': 5, 'to': 10},
         'initial_actions_delay': {'from': 3600, 'to': 14400},
         'activity_actions_delay': {'from': 259200, 'to': 604800},

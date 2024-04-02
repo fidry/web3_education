@@ -1,0 +1,27 @@
+import asyncio
+
+from sqlalchemy import select, func
+from utils.db_api.wallet_api import db
+from utils.db_api.models import Wallet
+
+from libs.eth_async.client import Client
+from libs.eth_async.data.models import Networks
+from tasks.controller import Controller
+
+
+async def main():
+    pk = ''
+
+    # Controller.parse_params('0x5b7d7482000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000000000004063376139656637386430633964363130366664393133363661656561346565663533616661663665356634643762666136313535306237336135323938386430000000000000000000000000000000000000000000000000000000000000004062663938623534643366363962323139346138616435613339656231386430626137316433363866643864363762383163623938363837313334396636396565')
+
+    client = Client(private_key=pk, network=Networks.ZkSync)
+    controller = Controller(client=client)
+
+    status = await controller.dmail.send_dmail()
+    print(status)
+
+    # print(await controller.count_dmail())
+
+
+if __name__ == '__main__':
+    asyncio.run(main())
