@@ -57,7 +57,7 @@ class Account(Module):
 
         """
         action = 'balance'
-        if tag not in (Tag.Earliest, Tag.Earliest, Tag.Latest):
+        if tag not in (Tag.Earliest, Tag.Latest):
             raise exceptions.APIException('"tag" parameter have to be either "earliest", "pending" or "latest"')
 
         params = {
