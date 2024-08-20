@@ -1,0 +1,55 @@
+Практика:
+1) Взять текстовый файл с аккаунтами твиттер и написать функцию,
+которая прочитает этот файл и преобразовать информацию из него в json
+Формат файла может быть любым. Формат json может быть любым
+(главное, чтобы вам было удобно с ним работать)
+Пример файла с twitter аккаунтами:
+
+login: PaytonWatk89533
+password: hcMscB452064
+mail: bayuk5392prots9@hotmail.com
+passwordmail: 1iKWPG365041
+AUTH_TOKEN: 106aab0df134bcaecb5943094874673eccaf81fe
+2fa.fb.rip: 2fa.fb.rip/HTTY27L2LJNYP4CV
+
+login: trent_bish56112
+password: Hl8rEH211034
+mail: humid6453jamy@hotmail.com
+passwordmail: Hl8rEH211034
+AUTH_TOKEN: 5026bb2bc1410cc8298f003a98422c8fbca95fbd
+2fa.fb.rip: 2fa.fb.rip/7POFNLPN43LHLRRS
+
+login: KMoran99753
+password: hcMscB452064
+mail: bolger2600arsonp@hotmail.com
+passwordmail: hcMscB452064
+AUTH_TOKEN: 77b987a2e15ba543e73c3b2311c155919832fb1c
+2fa.fb.rip: 2fa.fb.rip/Y7RVOHHFLWX4TDXQ
+
+Пример json файла:
+
+{
+  "PaytonWatk89533": {
+    "password": "1iKWPG365041",
+    "mail": "bayuk5392prots9@hotmail.com",
+    "auth_token": "106aab0df134bcaecb5943094874673eccaf81fe",
+    "totp": "2fa.fb.rip/HTTY27L2LJNYP4CV"
+  },
+  "trent_bish56112": {
+    "password": "Hl8rEH211034",
+    "mail": "humid6453jamy@hotmail.com",
+    "auth_token": "5026bb2bc1410cc8298f003a98422c8fbca95fbd",
+    "totp": "2fa.fb.rip/7POFNLPN43LHLRRS"
+  },
+  "KMoran99753": {
+    "password": "hcMscB452064",
+    "mail": "bolger2600arsonp@hotmail.com",
+    "auth_token": "77b987a2e15ba543e73c3b2311c155919832fb1c",
+    "totp": "2fa.fb.rip/Y7RVOHHFLWX4TDXQ"
+  }
+}
+
+2) Написать pydantic модели для работы с json из нового файла с аккаунтами
+
+3) Используя модели pydantic, написать софт,
+который сделает взаимную подписку между всеми аккаунтами в json файле
