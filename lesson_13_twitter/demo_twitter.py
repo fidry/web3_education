@@ -9,7 +9,7 @@ logger.add(sys.stdout, level="INFO")
 logger.enable("twitter")
 
 
-proxy = 'http://TS4hXHJS:CZArvuze@45.147.1.211:64392'
+proxy = 'СЮДА НАДО ВСТАВИТЬ ПРОКСИ'
 
 my_twitter_id = 1801148079321542656
 elonmusk_twitter_id = 44196397

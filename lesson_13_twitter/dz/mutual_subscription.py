@@ -11,7 +11,7 @@ from models import Accounts
 
 accounts_path = '../0b4a82.txt'
 accounts_json_path = './accounts.json'
-proxy = 'http://TS4hXHJS:CZArvuze@45.147.1.211:64392'
+proxy = 'СЮДА НАДО ВСТАВИТЬ ПРОКСИ'
 
 # text_to_json(from_path=accounts_path, to_path=accounts_json_path)
 
