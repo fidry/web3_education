@@ -1,0 +1,6 @@
+loguru==0.7.0
+requests==2.31.0
+fake-useragent==1.1.1
+playwright==1.45.0
+pydantic==2.8.2
+aiohttp~=3.9.5
