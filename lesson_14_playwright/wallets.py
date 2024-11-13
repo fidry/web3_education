@@ -1,9 +1,17 @@
-from data.models import Wallets
+from data.models import Wallet
 
 
-WALLETS = Wallets.parse_obj([
-    {
-        'address': '',
-        'private_key': '',
-    },
-]).root
+WALLETS = [
+    Wallet(
+        address='',
+        private_key=''
+    ),
+    # Wallet(
+    #     address=...,
+    #     private_key=...
+    # ),
+    # Wallet(
+    #     address=...,
+    #     private_key=...
+    # ),
+]

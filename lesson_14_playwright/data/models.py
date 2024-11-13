@@ -1,13 +1,10 @@
-from pydantic import BaseModel, RootModel
-
-
-class Wallet(BaseModel):
-    address: str
-    private_key: str
+class Wallet:
+    def __init__(self, address: str, private_key: str):
+        self.address = address
+        self.private_key = private_key
 
     def __repr__(self):
-        return f"Wallet(address='{self.address}', private_key='{self.private_key[:3]}***{self.private_key[-3:]}')"
-
-
-class Wallets(RootModel[list[Wallet]]):
-    pass
+        return (f"Wallet("
+                f"address='{self.address}', "
+                f"private_key='{self.private_key[:3]}***{self.private_key[-3:]}'"
+                f")")

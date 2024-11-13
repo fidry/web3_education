@@ -42,6 +42,7 @@ async def process_wallet(wallet):
         await asyncio.sleep(3)
         await trade.sell_sol()
         await asyncio.sleep(3)
+        # await asyncio.sleep(999)
 
 
 async def main():
