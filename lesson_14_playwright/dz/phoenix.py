@@ -54,8 +54,6 @@ class PhoenixTrade:
                 await asyncio.sleep(2)
                 backpack_page = await self.get_backpack_page()
 
-                await phoenix_page.goto(settings.PHOENIX_URL)
-                await phoenix_page.wait_for_load_state(state='networkidle')
                 await phoenix_page.bring_to_front()
 
                 connect_wallet_btn = phoenix_page.locator(
@@ -88,10 +86,6 @@ class PhoenixTrade:
                 await expect(approve_btn.first).to_be_visible()
                 await approve_btn.click()
 
-                # # для демонстрации
-                # await asyncio.sleep(5)
-                # print(self.context.pages)
-
                 logger.success(f'{self.wallet.address} | Wallet Connected To Phoenix')
                 return
 
@@ -119,14 +113,13 @@ class PhoenixTrade:
         logger.debug(f'{self.wallet.address} | Wallet Unlocked')
 
     async def sell_sol(self, max_retries: int = 10) -> None:
+        # todo: добавить возможность отправки транзакции fast
         logger.debug(f'{self.wallet.address} | Starting Swap SOL to USDT')
         backpack_page = await self.get_backpack_page()
         phoenix_page = await self.get_phoenix_page()
         for attempt in range(1, max_retries + 1):
             try:
                 await phoenix_page.bring_to_front()
-                await phoenix_page.reload()
-                await phoenix_page.wait_for_load_state(state='networkidle')
 
                 sell_btn = phoenix_page.get_by_text(text='Sell')
                 await expect(sell_btn.first).to_be_visible()
@@ -170,7 +163,7 @@ class PhoenixTrade:
                     pass
 
                 await backpack_page.bring_to_front()
-                await phoenix_page.wait_for_load_state(state='networkidle')
+                await backpack_page.wait_for_load_state(state='networkidle')
                 approve_btn = backpack_page.locator(
                     '//*[@id="options"]/div/div/span/span/div/div/div[3]/div[2]/div'
                 )
@@ -178,6 +171,7 @@ class PhoenixTrade:
                 await approve_btn.click()
                 logger.success(f'{self.wallet.address} | Wallet Sell {round(settings.SOL_TO_SELL, 4)} SOL to USDT')
                 await phoenix_page.bring_to_front()
+                # todo: Проверить, табличку, что транзакция успешна
                 return
 
             except Exception as e:
@@ -192,6 +186,7 @@ class PhoenixTrade:
                     raise
 
     async def sell_usdt(self, max_retries: int = 10) -> None:
+        # todo: добавить возможность отправки транзакции fast
         logger.info(f'{self.wallet.address} | Starting Swap USDT to SOL')
         backpack_page = await self.get_backpack_page()
         phoenix_page = await self.get_phoenix_page()
@@ -244,7 +239,7 @@ class PhoenixTrade:
                     pass
 
                 await backpack_page.bring_to_front()
-                await phoenix_page.wait_for_load_state(state='networkidle')
+                await backpack_page.wait_for_load_state(state='networkidle')
                 approve_btn = backpack_page.locator(
                     '//*[@id="options"]/div/div/span/span/div/div/div[3]/div[2]/div'
                 )
@@ -252,7 +247,7 @@ class PhoenixTrade:
                 await approve_btn.click()
                 logger.success(f'{self.wallet.address} | Wallet swapped {amount} USDT to SOL')
                 await phoenix_page.bring_to_front()
-
+                # todo: Проверить, табличку, что транзакция успешна
                 return
 
             except Exception as e:

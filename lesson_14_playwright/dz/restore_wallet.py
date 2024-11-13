@@ -1,5 +1,3 @@
-import asyncio
-
 from loguru import logger
 from playwright.async_api import BrowserContext
 
@@ -20,37 +18,37 @@ async def restore_wallet(context: BrowserContext, wallet: Wallet) -> bool:
 
             # Import Wallet
             await page.locator(
-                '//*[@id="options"]/span/span/div/div/div/div/div/div[1]/div/div/div[3]/div/button[2]'
+                '//*[@id="options"]/span/span/div/div/div/div/div/div[1]/div/div/div[3]/div/span[2]/button'
             ).click()
 
             await page.get_by_text(text='Solana').click()
 
             # Import private key
             await page.locator(
-                '//*[@id="options"]/span/span/div/div/div/div/div[1]/div[1]/div/div/div[2]/button[3]'
+                '//*[@id="options"]/span/span/div/div/div/div/div[1]/div[1]/div/div/div[2]/span[4]/button'
             ).click()
 
             # Enter private key
             await page.locator(
-                '//*[@id="options"]/span/span/div/div/div/div/div[1]/div[1]/div/div/div[2]/span/textarea'
+                '//*[@id="options"]/span/span/div/div/div/div/div[1]/div[1]/div/div/div[2]/span/span/textarea'
             ).fill(
                 f'{wallet.private_key}'
             )
 
             # Import
             await page.locator(
-                '//*[@id="options"]/span/span/div/div/div/div/div[1]/div[1]/div/div/div[3]/button'
+                '//*[@id="options"]/span/span/div/div/div/div/div[1]/div[1]/div/div/div[3]/span/button'
             ).click()
 
             # fill password
             await page.locator(
-                '//*[@id="options"]/span/span/div/div/div/div/div[1]/div[1]/div/form/div[2]/div[1]/span/input'
+                '//*[@id="options"]/span/span/div/div/div/div/div[1]/div[1]/div/form/div[2]/div[1]/span/span/input'
             ).type(
                 settings.EXTENTION_PASSWORD
             )
             # fill password 2
             await page.locator(
-                '//*[@id="options"]/span/span/div/div/div/div/div[1]/div[1]/div/form/div[2]/div[2]/span/input'
+                '//*[@id="options"]/span/span/div/div/div/div/div[1]/div[1]/div/form/div[2]/div[2]/span/span/input'
             ).type(
                 settings.EXTENTION_PASSWORD
             )
@@ -60,11 +58,11 @@ async def restore_wallet(context: BrowserContext, wallet: Wallet) -> bool:
 
             # next
             await page.locator(
-                '//*[@id="options"]/span/span/div/div/div/div/div[1]/div[1]/div/form/div[3]/button[2]'
+                '//*[@id="options"]/span/span/div/div/div/div/div[1]/div[1]/div/form/div[3]/span/button'
             ).click()
 
             logger.success(f'{wallet.address} | Wallet Ready To Work')
-            await page.close()
+            # await page.close()
             return True
 
         except Exception as err:
