@@ -1,10 +1,11 @@
 DEFAULT_SLEEP = 10
 HEADLESS = False
+FAST = False
 PROXY = ''
 
 EXTENTION_IDENTIFIER = 'aflkmfhebedbjioipglgcbcmnbpgliof'
 EXTENTION_VERSION = '0.10.92_0'
-EXTENTION_PATH = f''
+EXTENTION_PATH = ''
 EXTENTION_PASSWORD = ''
 
 PHOENIX_URL = 'https://app.phoenix.trade/market/4DoNfFBfF7UokCC2FQzriy7yHK6DY6NVdYpuekQ5pRgg'
