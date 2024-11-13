@@ -114,7 +114,7 @@ class PhoenixTrade:
 
     async def sell_sol(self, max_retries: int = 10) -> None:
         # todo: добавить возможность отправки транзакции fast
-        logger.debug(f'{self.wallet.address} | Starting Swap SOL to USDT')
+        logger.debug(f'{self.wallet.address} | Starting Swap SOL to USDC')
         backpack_page = await self.get_backpack_page()
         phoenix_page = await self.get_phoenix_page()
         for attempt in range(1, max_retries + 1):
@@ -170,7 +170,7 @@ class PhoenixTrade:
                 await expect(approve_btn.first).to_be_visible()
                 await approve_btn.click()
 
-                logger.success(f'{self.wallet.address} | Wallet Sell {round(settings.SOL_TO_SELL, 4)} SOL to USDT')
+                logger.success(f'{self.wallet.address} | Wallet Sell {round(settings.SOL_TO_SELL, 4)} SOL to USDC')
 
                 await phoenix_page.bring_to_front()
                 # todo: Проверить, табличку, что транзакция успешна
@@ -184,5 +184,5 @@ class PhoenixTrade:
                     logger.info(f'Retrying... (Attempt {attempt} of {max_retries})')
                 else:
                     logger.error(
-                        f'{self.wallet.address} | Unable to complete SOL to USDT swap after {max_retries} attempts')
+                        f'{self.wallet.address} | Unable to complete SOL to USDC swap after {max_retries} attempts')
                     raise

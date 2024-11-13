@@ -114,7 +114,7 @@ class PhoenixTrade:
 
     async def sell_sol(self, max_retries: int = 10, fast: bool = settings.FAST) -> None:
         # todo: добавить возможность отправки транзакции fast
-        logger.debug(f'{self.wallet.address} | Starting Swap SOL to USDT')
+        logger.debug(f'{self.wallet.address} | Starting Swap SOL to USDC')
         backpack_page = await self.get_backpack_page()
         phoenix_page = await self.get_phoenix_page()
         for attempt in range(1, max_retries + 1):
@@ -199,10 +199,10 @@ class PhoenixTrade:
                 status_text = await status.first.inner_text()
                 if 'Failed to send transaction' in status_text:
                     logger.error(
-                        f'{self.wallet.address} | Wallet Sell {round(settings.SOL_TO_SELL, 4)} SOL to USDT')
+                        f'{self.wallet.address} | Wallet Sell {round(settings.SOL_TO_SELL, 4)} SOL to USDC')
                 else:
                     logger.success(
-                        f'{self.wallet.address} | Wallet Sell {round(settings.SOL_TO_SELL, 4)} SOL to USDT')
+                        f'{self.wallet.address} | Wallet Sell {round(settings.SOL_TO_SELL, 4)} SOL to USDC')
 
                 return
 
@@ -214,12 +214,12 @@ class PhoenixTrade:
                     logger.info(f'Retrying... (Attempt {attempt} of {max_retries})')
                 else:
                     logger.error(
-                        f'{self.wallet.address} | Unable to complete SOL to USDT swap after {max_retries} attempts')
+                        f'{self.wallet.address} | Unable to complete SOL to USDC swap after {max_retries} attempts')
                     raise
 
     async def sell_usdc(self, max_retries: int = 10, fast: bool = settings.FAST) -> None:
         # todo: добавить возможность отправки транзакции fast
-        logger.info(f'{self.wallet.address} | Starting Swap USDT to SOL')
+        logger.info(f'{self.wallet.address} | Starting Swap USDC to SOL')
         backpack_page = await self.get_backpack_page()
         phoenix_page = await self.get_phoenix_page()
 
@@ -253,10 +253,10 @@ class PhoenixTrade:
                 await expect(market_btn.first).to_be_visible()
                 await market_btn.click()
 
-                max_usdt_amount = phoenix_page.locator(
+                max_USDC_amount = phoenix_page.locator(
                     '//*[@id="root"]/div[4]/div[2]/div[2]/div[2]/div/div[2]/div/div[2]/div[2]/p[2]')
-                await expect(max_usdt_amount.first).to_be_visible()
-                amount = float((await max_usdt_amount.inner_text()).split(': ')[1])
+                await expect(max_USDC_amount.first).to_be_visible()
+                amount = float((await max_USDC_amount.inner_text()).split(': ')[1])
 
                 # amount = 1
 
@@ -272,7 +272,7 @@ class PhoenixTrade:
 
                 if place_market_order_btn_text in [
                     'Enter an amount',
-                    'Insufficient USDT balance',
+                    'Insufficient USDC balance',
                     'Insufficient size'
                 ]:
                     await backpack_page.reload()
@@ -305,9 +305,9 @@ class PhoenixTrade:
                 await expect(status.first).to_be_visible(timeout=200_000)
                 status_text = await status.first.inner_text()
                 if 'Failed to send transaction' in status_text:
-                    logger.error(f'{self.wallet.address} | Wallet swapped {amount} USDT to SOL')
+                    logger.error(f'{self.wallet.address} | Wallet swapped {amount} USDC to SOL')
                 else:
-                    logger.success(f'{self.wallet.address} | Wallet swapped {amount} USDT to SOL')
+                    logger.success(f'{self.wallet.address} | Wallet swapped {amount} USDC to SOL')
                 return
 
             except Exception as e:
@@ -317,5 +317,5 @@ class PhoenixTrade:
                 if attempt <= max_retries:
                     logger.info(f'Retrying... (Attempt {attempt + 1} of {max_retries})')
                 else:
-                    logger.error(f'{self.wallet.address} | Unable to complete USDT to SOL swap after {max_retries} attempts')
+                    logger.error(f'{self.wallet.address} | Unable to complete USDC to SOL swap after {max_retries} attempts')
                     raise
