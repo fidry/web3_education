@@ -157,9 +157,23 @@ class PhoenixTrade:
                     '//*[@id="root"]/div[4]/div[2]/div[2]/div[2]/div/div[2]/div/div[2]/div[3]/div/input'
                 ).type(str(settings.SOL_TO_SELL))
 
-                place_market_order_btn = phoenix_page.locator(
-                    '//*[@id="root"]/div[4]/div[2]/div[2]/div[2]/div/div[2]/div/div[2]/div[5]/div/button'
-                )
+                try:
+                    risk_checkbox = phoenix_page.locator(
+                        '//*[@id="root"]/div[4]/div[2]/div[2]/div[2]/div/div[2]/div/div[2]/div[6]/div/label/span[1]/input')
+                    await expect(risk_checkbox.first).to_be_visible()
+                    await risk_checkbox.click()
+                    risk_flag = True
+                except Exception:
+                    risk_flag = False
+
+                if risk_flag:
+                    place_market_order_btn = phoenix_page.locator(
+                        '//*[@id="root"]/div[4]/div[2]/div[2]/div[2]/div/div[2]/div/div[2]/div[7]/div/button'
+                    )
+                else:
+                    place_market_order_btn = phoenix_page.locator(
+                        '//*[@id="root"]/div[4]/div[2]/div[2]/div[2]/div/div[2]/div/div[2]/div[6]/div/button'
+                    )
                 place_market_order_btn_text = await place_market_order_btn.text_content()
 
                 if place_market_order_btn_text in [
@@ -265,9 +279,24 @@ class PhoenixTrade:
                     '//*[@id="root"]/div[4]/div[2]/div[2]/div[2]/div/div[2]/div/div[2]/div[3]/div/input'
                 ).type(f'{amount}')
 
-                place_market_order_btn = phoenix_page.locator(
-                    '//*[@id="root"]/div[4]/div[2]/div[2]/div[2]/div/div[2]/div/div[2]/div[5]/div/button'
-                )
+                try:
+                    risk_checkbox = phoenix_page.locator(
+                        '//*[@id="root"]/div[4]/div[2]/div[2]/div[2]/div/div[2]/div/div[2]/div[6]/div/label/span[1]/input')
+                    await expect(risk_checkbox.first).to_be_visible()
+                    await risk_checkbox.click()
+                    risk_flag = True
+                except Exception:
+                    risk_flag = False
+
+                if risk_flag:
+                    place_market_order_btn = phoenix_page.locator(
+                        '//*[@id="root"]/div[4]/div[2]/div[2]/div[2]/div/div[2]/div/div[2]/div[7]/div/button'
+                    )
+                else:
+                    place_market_order_btn = phoenix_page.locator(
+                        '//*[@id="root"]/div[4]/div[2]/div[2]/div[2]/div/div[2]/div/div[2]/div[6]/div/button'
+                    )
+
                 place_market_order_btn_text = await place_market_order_btn.text_content()
 
                 if place_market_order_btn_text in [
