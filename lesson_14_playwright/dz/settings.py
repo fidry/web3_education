@@ -5,7 +5,7 @@ PROXY = ''
 
 EXTENTION_IDENTIFIER = 'aflkmfhebedbjioipglgcbcmnbpgliof'
 EXTENTION_VERSION = '0.10.92_0'
-EXTENTION_PATH = ''
+EXTENTION_PATH = f''
 EXTENTION_PASSWORD = ''
 
 PHOENIX_URL = 'https://app.phoenix.trade/market/4DoNfFBfF7UokCC2FQzriy7yHK6DY6NVdYpuekQ5pRgg'
@@ -15,3 +15,9 @@ SLOW_MO = None
 ATTEMPTS_NUMBER_RESTORE = 10
 
 SOL_TO_SELL = 0.001
+ETH_TO_SELL = 0.0001
+
+MM_EXTENTION_IDENTIFIER = f'nkbihfbeogaeaoehlefnkodbefgpgknn'
+MM_EXTENTION_VERSION = '12.5.1_0'
+MM_EXTENTION_PATH = f''
+MM_SEED = ''
