@@ -135,8 +135,16 @@ class PhoenixTrade:
                     '//*[@id="root"]/div[4]/div[2]/div[2]/div[2]/div/div[2]/div/div[2]/div[3]/div/input'
                 ).type(str(settings.SOL_TO_SELL))
 
+                try:
+                    risk_checkbox = phoenix_page.locator(
+                        '//*[@id="root"]/div[4]/div[2]/div[2]/div[2]/div/div[2]/div/div[2]/div[6]/div/label/span[1]/input')
+                    await expect(risk_checkbox.first).to_be_visible()
+                    await risk_checkbox.click()
+                except Exception:
+                    ...
+
                 place_market_order_btn = phoenix_page.locator(
-                    '//*[@id="root"]/div[4]/div[2]/div[2]/div[2]/div/div[2]/div/div[2]/div[5]/div/button'
+                    '//*[@id="root"]/div[4]/div[2]/div[2]/div[2]/div/div[2]/div/div[2]/div[7]/div/button'
                 )
                 place_market_order_btn_text = await place_market_order_btn.text_content()
 
