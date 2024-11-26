@@ -43,22 +43,22 @@ from pydantic import (
 #     }
 # '''
 
-# city_1 = City.parse_raw(input_json_1)
+# city_1 = City.model_validate_json(input_json_1)
 # print(city_1)
 # print(city_1.city_id)
 # print(city_1.name)
 # print(city_1.population)
 
-# city_2 = City.parse_raw(input_json_2)
+# city_2 = City.model_validate_json(input_json_2)
 # print(city_2)
 # print(city_2.city_id)
 # print(city_2.name)
 # print(city_2.population)
 # print(city_2.population)
 
-# city_3 = City.parse_raw(input_json_3)
+# city_3 = City.model_validate_json(input_json_3)
 # try:
-#     city_3 = City.parse_raw(input_json_3)
+#     city_3 = City.model_validate_json(input_json_3)
 # except ValidationError as err:
 #     print(err.json())
 
@@ -93,7 +93,7 @@ from pydantic import (
 #     }
 # '''
 #
-# city_4 = City.parse_raw(input_json_4)
+# city_4 = City.model_validate_json(input_json_4)
 # print(city_4)
 # print(city_4.tags)
 # print(city_4.tags[0])
@@ -101,7 +101,7 @@ from pydantic import (
 
 # tag = city_4.tags[0]
 # print(tag)
-# print(tag.json())
+# print(tag.model_dump_json())
 
 
 # ----------------------------------------------------------------------------------------
@@ -119,14 +119,14 @@ from pydantic import (
 #     }
 # '''
 #
-# city_5 = City.parse_raw(input_json_5)
+# city_5 = City.model_validate_json(input_json_5)
 # print(city_5)
 # print(city_5.city_id)
 # print(city_5.name)
 #
-# print(city_5.json())
-# print(city_5.json(by_alias=True))
-# print(city_5.json(by_alias=True, exclude={'city_id'}))
+# print(city_5.model_dump_json())
+# print(city_5.model_dump_json(by_alias=True))
+# print(city_5.model_dump_json(by_alias=True, exclude={'city_id'}))
 
 
 # ----------------------------------------------------------------------------------------
@@ -162,7 +162,7 @@ from pydantic import (
 #     }
 # '''
 #
-# city_6 = City.parse_raw(input_json_6)
+# city_6 = City.model_validate_json(input_json_6)
 # print(city_6)
 # print(city_6.city_id)
 # print(city_6.name)
@@ -194,7 +194,7 @@ from pydantic import (
 #     }
 # '''
 #
-# city_6 = City.parse_raw(input_json_6)
+# city_6 = City.model_validate_json(input_json_6)
 # print(city_6)
 
 
@@ -241,7 +241,7 @@ from pydantic import (
 # '''
 #
 #
-# cars = CarsModel.parse_obj(input_json_7)
+# cars = CarsModel.model_validate(input_json_7)
 # print(cars)
 # print(cars.root)
 # print(list(cars.root.keys()))
@@ -268,5 +268,5 @@ from pydantic import (
 #     {"name": "item2", "value": 200}
 # ]
 #
-# items = ItemsModel.parse_obj(input_json_8).root
+# items = ItemsModel.model_validate(input_json_8).root
 # print(items)
