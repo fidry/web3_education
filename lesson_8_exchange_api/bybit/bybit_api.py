@@ -27,7 +27,7 @@ class Bybit:
             self,
             credentials: ByBitCredentials,
             category: str = Category.spot,
-            account_type: str = AccountType.spot
+            account_type: str = AccountType.unified
     ):
         if not credentials.completely_filled():
             raise Exception('Credentials are not filled in completely')
@@ -41,13 +41,22 @@ class Bybit:
             api_secret=credentials.api_secret
         )
 
-    def get_balance(self, coin: Optional[str] = None) -> dict:
+    def get_balance(self, coin: Optional[str] = None) -> dict[str, str]:
+        """
+        Функция возвращает словарь с доступным балансом по монетам (если баланс или его часть
+        заблокирована в открытом спотовом ордере, баланс или его часть не попадет в этот словарь)
+        """
         coin_balance_dict = {}
         balances_lst = self.session.get_wallet_balance(accountType=self.account_type, coin=coin)['result']['list']
         for elem in balances_lst:
             for coin in elem['coin']:
                 symbol = coin['coin']
-                coin_balance = coin['free']
+
+                # coin['equity'] - Количетсво монет
+                # coin['walletBalance'] - Остаток монет в кошельке
+                # coin['usdValue'] - Полный баланс в USD
+                # coin['locked'] - Заблокированный баланс из-за открытого спотового ордера
+                coin_balance = coin['availableToWithdraw']
                 coin_balance_dict[symbol] = coin_balance
         return coin_balance_dict
 
@@ -195,7 +204,7 @@ class Bybit:
             qty: float,
             price: Optional[float],
             instrument_info: Optional[InstrumentInfo] = None
-    ) -> tuple[Optional[str]]:
+    ) -> tuple[str | None, str | None]:
         # qty должен соответствовать base_precision, и количество должно быть больше min_order_qty
         # price должен соответствовать tick_size
 

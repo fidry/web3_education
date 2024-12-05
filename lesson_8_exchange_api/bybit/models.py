@@ -31,10 +31,10 @@ class OrderType:
     limit: str = 'Limit'
 
 
+# https://bybit-exchange.github.io/docs/v5/enum#accounttype
 class AccountType:
     unified: str = 'UNIFIED'
-    contract: str = 'CONTRACT'
-    spot: str = 'SPOT'
+    fund: str = 'FUND'
 
 
 class TimeInForce:
