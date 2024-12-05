@@ -23,22 +23,22 @@ async def main():
     # print()
 
     # withdrawal_history = await okx_client.asset.withdrawal_history()
-    # # # print(withdrawal_history)
+    # print(withdrawal_history)
     # for withdrawal in list(withdrawal_history)[:3]:
     #     print(withdrawal, withdrawal_history[withdrawal])
     # print()
+
+    # ------------------------------------------------------------------------------------------------
 
     okx_actions = OKXActions(credentials=okx_credentials)
 
     # print(await okx_actions.all_balances_are_zero(amount=1))
     # print(await okx_actions.get_withdrawal_fee(token_symbol='ETH', chain=Chains.ArbitrumOne))
-
-    print(await okx_actions.try_to_get_tx_hash(wd_id=115902399))
+    # print(await okx_actions.try_to_get_tx_hash(wd_id=115902399))
 
 
 if __name__ == '__main__':
     if okx_credentials.completely_filled():
-        loop = asyncio.get_event_loop()
-        loop.run_until_complete(main())
+        asyncio.run(main())
     else:
         print('Specify all variables in the .env file!')
