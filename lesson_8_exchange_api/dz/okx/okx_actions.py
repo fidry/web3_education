@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from decimal import Decimal
 from loguru import logger
 
 from py_okx_async.OKXClient import OKXClient
@@ -33,7 +33,7 @@ class OKXActions:
                         type=TransferTypes.SubToMasterMasterKey
                     )
 
-    async def get_withdrawal_fee(self, token_symbol: str, chain: str) -> Optional[float]:
+    async def get_withdrawal_fee(self, token_symbol: str, chain: str) -> Decimal | None:
         token_symbol = token_symbol.upper()
         currencies = await self.okx_client.asset.currencies(token_symbol=token_symbol)
         if token_symbol not in currencies:
@@ -51,7 +51,7 @@ class OKXActions:
             return currency_info.minFee
         return None
 
-    async def try_to_get_tx_hash(self, wd_id: Union[str, int]) -> Optional[str]:
+    async def try_to_get_tx_hash(self, wd_id: str | int) -> str | None:
         wd_id = int(wd_id)
         withdrawal_history = await self.okx_client.asset.withdrawal_history(wdId=wd_id)
         if withdrawal_history and withdrawal_history.get(wd_id) and withdrawal_history.get(wd_id).txId:
@@ -60,7 +60,7 @@ class OKXActions:
     async def withdraw(
             self,
             to_address: str,
-            amount: Union[float, int, str],
+            amount: float | int | str,
             token_symbol: str,
             chain: str,
     ) -> str:
