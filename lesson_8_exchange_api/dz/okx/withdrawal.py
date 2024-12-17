@@ -11,22 +11,15 @@ from data import config
 
 
 def randfloat(from_: float, to_: float, decimal_places: int = 0) -> float:
-    # real, fraction = str(random.uniform(from_, to_)).split('.')
-    # if decimal_places:
-    #     fraction = fraction[:decimal_places]
-    # return float('.'.join(
-    #     [real, fraction]
-    # ))
-
     return int((random.uniform(from_, to_) * 10 ** decimal_places)) / 10 ** decimal_places
 
 
 def get_rows(path: str) -> list[str]:
-    wallet_addresses = []
+    rows = []
     with open(path) as f:
-        for wallet_address in f:
-            wallet_addresses.append(wallet_address.strip())
-    return wallet_addresses
+        for row in f:
+            rows.append(row.strip())
+    return rows
 
 
 def add_row_to_file(path: str, row: str):
@@ -69,7 +62,7 @@ async def check_wallet_balance_evm(rpc: str, wallet_address: str | ChecksumAddre
         contract = w3.eth.contract(address=token_address, abi=token_abi)
         balance_wei = await contract.functions.balanceOf(wallet_address).call()
         decimals = await contract.functions.decimals(wallet_address).call()
-        balance_eth = balance_wei / 18 ** decimals
+        balance_eth = balance_wei / 10 ** decimals
         return balance_eth
 
 
@@ -89,25 +82,26 @@ async def okx_withdraw_evm(
         chain: str,
         token_symbol: str,
         wallet_address: str | ChecksumAddress,
+        amount_to_withdraw: float,
         rpc: str,
-        amount_to_withdraw: float | None = None,
         sleep: int = 60
 ) -> bool:
     try:
         okx = OKXActions(credentials=config.okx_credentials)
+
+        wallet_balance = await check_wallet_balance_evm(
+            rpc=rpc,
+            wallet_address=wallet_address
+        )
+        if wallet_balance >= amount_to_withdraw:
+            logger.success(f'{wallet_address}: already replenished. Wallet balance: {wallet_balance} {token_symbol} ({chain})')
+            return False
 
         # await check_gas_price(
         #     max_gas_price_gwei=config.maximum_gas_price,
         #     rpc=rpc,
         #     sleep=sleep
         # )
-
-        if not amount_to_withdraw:
-            amount_to_withdraw = randfloat(
-                from_=config.withdraw_amount['from'],
-                to_=config.withdraw_amount['to'],
-                decimal_places=8
-            )
 
         logger.info(f'{wallet_address}: start withdraw {amount_to_withdraw} {token_symbol} to {chain}')
 
@@ -128,9 +122,11 @@ async def okx_withdraw_evm(
 
         else:
             logger.error(f'{wallet_address} failed withdraw to {chain}: {res}')
-        return False
+
     except Exception as err:
         logger.error(f'{wallet_address}: something went wrong: {err}')
+
+    return False
 
 
 async def main():
@@ -142,10 +138,18 @@ async def main():
 
     for num, wallet_address in enumerate(wallets, start=1):
         logger.info(f'({num}/{len(wallets)}) {wallet_address}')
+
+        amount_to_withdraw = randfloat(
+            from_=config.withdraw_amount['from'],
+            to_=config.withdraw_amount['to'],
+            decimal_places=8
+        )
+
         res = await okx_withdraw_evm(
             chain=Chains.ArbitrumOne,
             token_symbol='ETH',
             wallet_address=wallet_address,
+            amount_to_withdraw=amount_to_withdraw,
             rpc='https://1rpc.io/arb',
         )
         if res:
